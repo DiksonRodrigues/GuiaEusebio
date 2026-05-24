@@ -1,0 +1,288 @@
+/* ── Reset para o painel admin ── */
+.adminBody {
+  background: #f1f5f9;
+  color: #1e293b;
+  font-family: 'Outfit', -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Shell com sidebar ── */
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  background: #1e1b4b;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.sidebarLogo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  padding: 0 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-decoration: none;
+  display: block;
+}
+
+.sidebarLogo span { color: #f97316; }
+
+.sidebarNav {
+  flex: 1;
+  padding: 1.5rem 0;
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1.5rem;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebarLink:hover,
+.sidebarLinkActive {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+.sidebarBottom {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.logoutBtn {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.logoutBtn:hover { background: rgba(239,68,68,0.25); }
+
+/* ── Main content ── */
+.main {
+  margin-left: 220px;
+  flex: 1;
+  padding: 2rem 2.5rem;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  margin: 0;
+}
+
+/* ── Cards / Containers ── */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Table ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+.table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+.table tr:hover td { background: #f8fafc; }
+
+.thumb {
+  width: 48px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #e2e8f0;
+}
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.badgeGreen { background: #dcfce7; color: #16a34a; }
+.badgeOrange { background: #fff7ed; color: #ea580c; }
+.badgeGray { background: #f1f5f9; color: #64748b; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  border: none;
+  font-family: inherit;
+}
+.btnPrimary { background: #5b21b6; color: #fff; }
+.btnPrimary:hover { background: #4c1d95; }
+.btnAccent { background: #f97316; color: #fff; }
+.btnAccent:hover { background: #ea580c; }
+.btnOutline { background: transparent; color: #64748b; border: 1px solid #e2e8f0; }
+.btnOutline:hover { background: #f8fafc; }
+.btnDanger { background: transparent; color: #ef4444; border: 1px solid #fecaca; }
+.btnDanger:hover { background: #fef2f2; }
+.btnSm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+
+/* ── Form ── */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.formFull { grid-column: 1 / -1; }
+
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+.label { font-size: 0.8rem; font-weight: 600; color: #475569; }
+
+.input,
+.select,
+.textarea {
+  padding: 0.6rem 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #1e293b;
+  background: #fff;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.input:focus, .select:focus, .textarea:focus {
+  border-color: #5b21b6;
+}
+.textarea { resize: vertical; min-height: 90px; }
+
+.imagePreview {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f1f5f9;
+  margin-top: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+.checkboxRow input { width: 16px; height: 16px; cursor: pointer; accent-color: #5b21b6; }
+
+/* ── Products section ── */
+.productsSection { margin-top: 2rem; }
+.productsTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.productRow {
+  display: grid;
+  grid-template-columns: 1fr 140px 140px auto;
+  gap: 0.75rem;
+  align-items: end;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+/* ── Login page ── */
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e1b4b;
+}
+.loginCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.3);
+}
+.loginTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  margin-bottom: 0.25rem;
+}
+.loginSub { font-size: 0.85rem; color: #64748b; margin-bottom: 1.75rem; }
+.loginError { color: #ef4444; font-size: 0.85rem; margin-top: 0.75rem; text-align: center; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .sidebar { width: 64px; }
+  .sidebarLogo, .sidebarLink span, .sidebarBottom { display: none; }
+  .main { margin-left: 64px; padding: 1.5rem; }
+  .formGrid { grid-template-columns: 1fr; }
+  .productRow { grid-template-columns: 1fr 1fr; }
+}
