@@ -22,6 +22,26 @@ import styles from "./business.module.css";
 import BusinessTracker from "@/components/BusinessTracker/BusinessTracker";
 import WhatsAppButton from "@/components/WhatsAppButton/WhatsAppButton";
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  try {
+    const { slug } = await params;
+    const business = await getBusinessBySlug(slug);
+    if (!business) return {};
+    const category = business.categories?.name ?? "";
+    const title = `${business.name} — ${category ? `${category} em ` : ""}${cityConfig.name} | ${cityConfig.appTitle}`;
+    const description =
+      business.description ||
+      `Confira ${business.name}${category ? `, ${category}` : ""} em ${cityConfig.name}. Endereço, horários, telefone e promoções.`;
+    return {
+      title,
+      description,
+      openGraph: { title, description, images: business.image_url ? [business.image_url] : [] },
+    };
+  } catch {
+    return {};
+  }
+}
+
 export default async function BusinessDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
