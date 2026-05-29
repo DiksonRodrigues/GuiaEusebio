@@ -9,6 +9,23 @@ import NeighborhoodFilter from "./NeighborhoodFilter";
 import { supabase } from "@/lib/supabase";
 import BusinessCardImage from "@/components/BusinessCardImage/BusinessCardImage";
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  try {
+    const { slug } = await params;
+    const { data } = await supabase
+      .from("categories")
+      .select("name")
+      .eq("slug", slug)
+      .single();
+    if (!data) return {};
+    const title = `${data.name} em ${cityConfig.name} | ${cityConfig.appTitle}`;
+    const description = `Encontre os melhores estabelecimentos de ${data.name} em ${cityConfig.name}. Veja endereços, horários, telefones e promoções exclusivas.`;
+    return { title, description, openGraph: { title, description } };
+  } catch {
+    return {};
+  }
+}
+
 export default async function CategoryPage({
   params,
   searchParams,

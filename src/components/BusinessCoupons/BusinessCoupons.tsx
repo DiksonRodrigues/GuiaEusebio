@@ -11,6 +11,7 @@ type Coupon = {
   discount_label: string;
   description: string | null;
   expires_at: string | null;
+  redemption_count?: number;
 };
 
 type Props = {
@@ -25,6 +26,10 @@ function formatExpiry(dateStr: string) {
     month: "2-digit",
     year: "numeric",
   });
+}
+
+function daysRemaining(dateStr: string): number {
+  return Math.ceil((new Date(dateStr).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 }
 
 function CouponCard({ coupon, whatsapp, businessName }: { coupon: Coupon; whatsapp: string | null; businessName: string }) {
@@ -45,7 +50,10 @@ function CouponCard({ coupon, whatsapp, businessName }: { coupon: Coupon; whatsa
   function handleRedeem() {
     localStorage.setItem(storageKey, "true");
     setRedeemed(true);
-    track("coupon_redeem", { coupon_id: coupon.id });
+    track("coupon_redeem", {
+      coupon_id: coupon.id,
+      metadata: { utm_source: "guiaeusebio", utm_medium: "coupon", utm_campaign: coupon.code },
+    });
     if (whatsapp) {
       const phone = whatsapp.replace(/\D/g, "");
       const msg = encodeURIComponent(
@@ -55,14 +63,32 @@ function CouponCard({ coupon, whatsapp, businessName }: { coupon: Coupon; whatsa
     }
   }
 
+  const days = coupon.expires_at ? daysRemaining(coupon.expires_at) : null;
+  const urgencyLabel =
+    days !== null && days <= 7
+      ? days <= 0 ? "Vence hoje!" : days === 1 ? "Vence amanhã!" : `Vence em ${days} dias!`
+      : null;
+
   return (
     <div className={`${styles.coupon} ${redeemed ? styles.couponRedeemed : ""}`}>
       <div className={styles.couponLeft}>
         <span className={styles.label}>{coupon.discount_label}</span>
         {coupon.description && <p className={styles.desc}>{coupon.description}</p>}
-        {coupon.expires_at && (
-          <span className={styles.expiry}>Válido até {formatExpiry(coupon.expires_at)}</span>
-        )}
+        <div className={styles.metaRow}>
+          {urgencyLabel && (
+            <span className={`${styles.urgency} ${days !== null && days <= 3 ? styles.urgencyCritical : styles.urgencyWarn}`}>
+              {urgencyLabel}
+            </span>
+          )}
+          {!urgencyLabel && coupon.expires_at && (
+            <span className={styles.expiry}>Válido até {formatExpiry(coupon.expires_at)}</span>
+          )}
+          {(coupon.redemption_count ?? 0) > 0 && (
+            <span className={styles.redemptionCount}>
+              🔥 {coupon.redemption_count} resgate{coupon.redemption_count !== 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className={styles.divider}>

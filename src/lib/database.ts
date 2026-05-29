@@ -154,7 +154,7 @@ export async function getCouponsByBusiness(businessId: string) {
   const now = new Date().toISOString();
   const { data, error } = await supabase
     .from("coupons")
-    .select("id, code, discount_label, description, expires_at")
+    .select("id, code, discount_label, description, expires_at, redemption_count")
     .eq("business_id", businessId)
     .eq("active", true)
     .or(`expires_at.is.null,expires_at.gt.${now}`)

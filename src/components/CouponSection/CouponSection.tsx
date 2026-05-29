@@ -12,6 +12,7 @@ type Coupon = {
   discount_label: string;
   description: string | null;
   expires_at: string | null;
+  redemption_count?: number;
   businesses: {
     name: string;
     whatsapp: string;
@@ -33,10 +34,15 @@ function formatExpiry(dateStr: string) {
   });
 }
 
+function daysRemaining(dateStr: string): number {
+  const diff = new Date(dateStr).getTime() - Date.now();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
 function buildWhatsAppUrl(whatsapp: string, code: string, discountLabel: string) {
   const phone = whatsapp.replace(/\D/g, "");
   const msg = encodeURIComponent(
-    `Olá! Vim pelo GuiaDesconto e quero usar o cupom *${code}* — ${discountLabel} 😊`
+    `Olá! Vim pelo GuiaEusébio e quero usar o cupom *${code}* — ${discountLabel} 😊`
   );
   return `https://wa.me/55${phone}?text=${msg}`;
 }
@@ -61,7 +67,10 @@ function CouponCard({ coupon }: { coupon: Coupon }) {
   function handleRedeem() {
     localStorage.setItem(storageKey, "true");
     setRedeemed(true);
-    track("coupon_redeem", { coupon_id: coupon.id });
+    track("coupon_redeem", {
+      coupon_id: coupon.id,
+      metadata: { utm_source: "guiaeusebio", utm_medium: "coupon", utm_campaign: coupon.code },
+    });
     if (coupon.businesses?.whatsapp) {
       window.open(
         buildWhatsAppUrl(coupon.businesses.whatsapp, coupon.code, coupon.discount_label),
@@ -69,6 +78,13 @@ function CouponCard({ coupon }: { coupon: Coupon }) {
       );
     }
   }
+
+  const days = coupon.expires_at ? daysRemaining(coupon.expires_at) : null;
+  const urgencyLabel =
+    days !== null && days <= 7
+      ? days <= 0 ? "Vence hoje!" : days === 1 ? "Vence amanhã!" : `Vence em ${days} dias!`
+      : null;
+  const urgencyClass = days !== null && days <= 3 ? styles.urgencyCritical : styles.urgencyWarn;
 
   return (
     <div className={`${styles.card} ${redeemed ? styles.cardRedeemed : ""}`}>
@@ -82,9 +98,19 @@ function CouponCard({ coupon }: { coupon: Coupon }) {
         {coupon.description && (
           <p className={styles.desc}>{coupon.description}</p>
         )}
-        {coupon.expires_at && (
-          <span className={styles.expiry}>Válido até {formatExpiry(coupon.expires_at)}</span>
-        )}
+        <div className={styles.metaRow}>
+          {urgencyLabel && (
+            <span className={`${styles.urgency} ${urgencyClass}`}>{urgencyLabel}</span>
+          )}
+          {!urgencyLabel && coupon.expires_at && (
+            <span className={styles.expiry}>Válido até {formatExpiry(coupon.expires_at)}</span>
+          )}
+          {(coupon.redemption_count ?? 0) > 0 && (
+            <span className={styles.redemptionCount}>
+              🔥 {coupon.redemption_count} resgate{coupon.redemption_count !== 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className={styles.divider}>

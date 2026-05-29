@@ -40,6 +40,10 @@ export async function POST(req: NextRequest) {
       session_id,
     });
 
+    if (event_type === "coupon_redeem" && coupon_id) {
+      await supabase.rpc("increment_coupon_redemption", { cid: coupon_id });
+    }
+
     return res;
   } catch {
     return NextResponse.json({ error: "internal" }, { status: 500 });
