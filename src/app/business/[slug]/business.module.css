@@ -233,7 +233,28 @@
   color: var(--accent);
   font-weight: 700;
   font-size: 1.1rem;
+}
+
+.productCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   margin-top: auto;
+  padding: 0.5rem 0.75rem;
+  background: #25d366;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+  text-align: center;
+}
+
+.productCta:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 992px) {

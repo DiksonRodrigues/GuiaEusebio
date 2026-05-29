@@ -150,6 +150,19 @@ export async function getBusinessBySlug(slug: string) {
   return data;
 }
 
+export async function getCouponsByBusiness(businessId: string) {
+  const now = new Date().toISOString();
+  const { data, error } = await supabase
+    .from("coupons")
+    .select("id, code, discount_label, description, expires_at")
+    .eq("business_id", businessId)
+    .eq("active", true)
+    .or(`expires_at.is.null,expires_at.gt.${now}`)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function getSupermarkets() {
   const today = new Date().toISOString().split("T")[0];
   const { data, error } = await supabase

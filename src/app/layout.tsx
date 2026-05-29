@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cityConfig } from "@/config/city";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
+import Footer from "@/components/Footer/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics/GoogleAnalytics";
 import CookieConsent from "@/components/CookieConsent/CookieConsent";
 
@@ -21,11 +22,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
 
-        <footer className="main-footer">
-          <div className="container">
-            <p>&copy; {new Date().getFullYear()} Guia Local. Todos os direitos reservados.</p>
-          </div>
-        </footer>
+        <Footer />
 
         <CookieConsent />
         <GoogleAnalytics />
