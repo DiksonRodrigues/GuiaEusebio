@@ -39,23 +39,26 @@ export default async function SupermercadosPage() {
           <div className={styles.grid}>
             {supermarkets.map((s: any) => (
               <Link key={s.id} href={`/supermercados/${s.slug}`} className={`${styles.card} glass-card`}>
-                <div className={styles.cardLogo}>
-                  {s.logo_url
-                    ? <div className={styles.logoWrap}>
-                        <Image src={s.logo_url} alt={s.name} fill sizes="96px" style={{ objectFit: "contain" }} />
-                      </div>
-                    : <div className={styles.logoPlaceholder}><ShoppingCart size={32} /></div>}
+                <div className={styles.cardCover}>
+                  {s.cover_url
+                    ? <Image src={s.cover_url} alt={`${s.name} capa`} fill sizes="(max-width:640px) 100vw, 400px" style={{ objectFit: "cover" }} />
+                    : <div className={styles.coverPlaceholder}><ShoppingCart size={40} /></div>}
+                  {s.activeFlyer
+                    ? <span className={styles.badgeActive}>
+                        <CalendarDays size={12} />
+                        Até {formatDate(s.activeFlyer.valid_until)}
+                      </span>
+                    : <span className={styles.badgeEmpty}>Sem encarte</span>}
                 </div>
 
                 <div className={styles.cardBody}>
                   <div className={styles.cardHeader}>
+                    {s.logo_url && (
+                      <div className={styles.logoWrap}>
+                        <Image src={s.logo_url} alt={s.name} fill sizes="48px" style={{ objectFit: "contain" }} />
+                      </div>
+                    )}
                     <h2 className={styles.cardName}>{s.name}</h2>
-                    {s.activeFlyer
-                      ? <span className={styles.badgeActive}>
-                          <CalendarDays size={12} />
-                          Até {formatDate(s.activeFlyer.valid_until)}
-                        </span>
-                      : <span className={styles.badgeEmpty}>Sem encarte</span>}
                   </div>
 
                   {s.description && (

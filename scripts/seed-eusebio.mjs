@@ -64,8 +64,9 @@ for (const cat of categoryMeta) {
     .from("categories")
     .update({ icon_name: cat.icon_name, color: cat.color })
     .eq("slug", cat.slug);
-  if (error && !error.message.includes("column")) {
-    console.warn(`  ⚠ categoria ${cat.slug}: ${error.message}`);
+  if (error) {
+    console.error(`  ✗ categoria ${cat.slug}: ${error.message}`);
+    console.error("  → Rode a migration 005_categories_icon_color.sql no Supabase antes do seed.");
   }
 }
 console.log("✓ Categorias atualizadas");
