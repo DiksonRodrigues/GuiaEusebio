@@ -9,11 +9,13 @@ import {
   Info,
   Calendar,
   ArrowLeft,
-  ShoppingBag
+  ShoppingBag,
+  MessageCircle
 } from "lucide-react";
 import Image from "next/image";
 import { cityConfig } from "@/config/city";
-import { getBusinessBySlug } from "@/lib/database";
+import { getBusinessBySlug, getCouponsByBusiness } from "@/lib/database";
+import BusinessCoupons from "@/components/BusinessCoupons/BusinessCoupons";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import styles from "./business.module.css";
@@ -33,6 +35,11 @@ export default async function BusinessDetail({ params }: { params: Promise<{ slu
   if (!business) {
     return notFound();
   }
+
+  let coupons: Awaited<ReturnType<typeof getCouponsByBusiness>> = [];
+  try {
+    coupons = await getCouponsByBusiness(business.id);
+  } catch {}
 
   return (
     <div className={styles.businessPage}>
@@ -99,7 +106,17 @@ export default async function BusinessDetail({ params }: { params: Promise<{ slu
               <p className={styles.description}>{business.description}</p>
             </section>
 
-            <section className={`${styles.card} glass-card animate-fade`} style={{ animationDelay: '0.1s' }}>
+            {coupons.length > 0 && (
+              <section className={`${styles.card} glass-card animate-fade`} style={{ animationDelay: '0.1s' }}>
+                <BusinessCoupons
+                  coupons={coupons}
+                  businessWhatsapp={business.whatsapp}
+                  businessName={business.name}
+                />
+              </section>
+            )}
+
+            <section className={`${styles.card} glass-card animate-fade`} style={{ animationDelay: coupons.length > 0 ? '0.2s' : '0.1s' }}>
               <h2><ShoppingBag size={20} /> Produtos</h2>
               <div className={styles.productGrid}>
                 {business.business_products?.map((prod: any, i: number) => (
@@ -116,6 +133,16 @@ export default async function BusinessDetail({ params }: { params: Promise<{ slu
                     <div className={styles.productInfo}>
                       <span className={styles.productName}>{prod.name}</span>
                       <span className={styles.productPrice}>{prod.price}</span>
+                      {business.whatsapp && (
+                        <a
+                          href={`https://wa.me/55${business.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(`Olá! Vim pelo GuiaEusébio e quero pedir: *${prod.name}*${prod.price ? ` — ${prod.price}` : ""} 😊`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.productCta}
+                        >
+                          <MessageCircle size={13} /> Pedir pelo WhatsApp
+                        </a>
+                      )}
                     </div>
                   </div>
                 ))}
